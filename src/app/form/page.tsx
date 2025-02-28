@@ -62,6 +62,7 @@ const form = () => {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             <div className="flex space-x-4 w-full max-w-6xl"> {/* Flex container for side-by-side layout */}
                 <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 py-6 mb-4 w-full max-w-md">
+                    
                     <h2 className="text-lg font-bold mb-4 text-gray-800">Activity Form</h2>
                     <label className="block mb-2 text-gray-700">
                         Activity:
@@ -74,6 +75,7 @@ const form = () => {
                             className="mt-1 block w-full p-2 border border-gray-300 rounded"
                         />
                     </label>
+
                     <label className="block mb-2 text-gray-700">
                         Price:
                         <input 
@@ -85,6 +87,7 @@ const form = () => {
                             className="mt-1 block w-full p-2 border border-gray-300 rounded"
                         />
                     </label>
+
                     <label className="block mb-2 text-gray-700">
                         Type:
                         <select 
@@ -153,18 +156,20 @@ const form = () => {
                         <h3 className="text-lg font-bold mb-2 text-gray-800">Submitted Data:</h3>
                         <p className="text-base mb-2 text-gray-800">Total submitted Data: {submittedData.length}</p>
                         {submittedData.map((data, index) => (
-                            <div key={index} className="mb-2 text-gray-800">
+                            <div key={index} className="mb-2 text-gray-800 flex items-center justify-between">
+                                <div className="flex-1">
+                                    <p>Activity: {data.activity}</p>
+                                    <p>Price: {data.price}</p>
+                                    <p>Type: {data.type}</p>
+                                    <p>Booking required: {data.booking ? 'True' : 'False'}</p>
+                                    <p>Accessibility: {data.accessibility}</p>
+                                </div>
                                 <button 
                                     onClick={() => handleDelete(index)} 
-                                    className="text-white hover:bg-red-700 bg-red-400 rounded p-1 text-sm"
+                                    className="text-white hover:bg-red-700 bg-red-400 rounded p-1 text-sm ml-4"
                                 >
                                     Delete
                                 </button>
-                                <p>Activity: {data.activity}</p>
-                                <p>Price: {data.price}</p>
-                                <p>Type: {data.type}</p>
-                                <p>Booking required: {data.booking ? 'True' : 'False'}</p>
-                                <p>Accessibility: {data.accessibility}</p>
                             </div>
                         ))}
                     </div>
