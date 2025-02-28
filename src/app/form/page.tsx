@@ -42,6 +42,7 @@ const form = () => {
         setFormData((prev) => ({ ...prev, accessibility: parseFloat(e.target.value) }));
       };
 
+      // for handling form submission
       const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newSubmittedData = [...submittedData, formData];
@@ -51,6 +52,7 @@ const form = () => {
         setFormData({ activity: '', price: '', type: '', booking: false, accessibility: 0 });
     };
 
+    // for handling the function to delete or remove data from submittedData 
     const handleDelete = (index: number) => {
         const updatedData = submittedData.filter((data, i) => i !== index);
         setSubmittedData(updatedData);
@@ -60,9 +62,9 @@ const form = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-            <div className="flex space-x-4 w-full max-w-6xl"> {/* Flex container for side-by-side layout */}
+            <div className="flex space-x-4 w-full max-w-6xl">
                 <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 py-6 mb-4 w-full max-w-md">
-                    
+
                     <h2 className="text-lg font-bold mb-4 text-gray-800">Activity Form</h2>
                     <label className="block mb-2 text-gray-700">
                         Activity:
