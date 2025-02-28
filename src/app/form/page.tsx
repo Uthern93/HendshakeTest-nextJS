@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 // declaring data type for each input for easier callback later
 interface FormData {
@@ -22,44 +22,34 @@ const form = () => {
       });
     const [submittedData, setSubmittedData] = useState<FormData[]>([]);
 
+    // load the data from local storage on first render
     useEffect(() => {
-        const savedFormData = localStorage.getItem('formData');
         const savedSubmittedData = localStorage.getItem('submittedData');
-    
-        if (savedFormData) {
-          setFormData(JSON.parse(savedFormData));
-        }
         if (savedSubmittedData) {
-          setSubmittedData(JSON.parse(savedSubmittedData));
+            setSubmittedData(JSON.parse(savedSubmittedData));
         }
-      }, []);
+    }, []);
 
 
     // this function is for handling the changes in input field
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-      };
-
+    }, []);
+    
     // this function is for handling the changes in input field of range
     const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData((prev) => ({ ...prev, accessibility: parseFloat(e.target.value) }));
       };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setSubmittedData((prev) => [...prev, formData]);
+        const newSubmittedData = [...submittedData, formData];
+        setSubmittedData(newSubmittedData);
+        // set the submitted data to local storage to persist the data
+        localStorage.setItem('submittedData', JSON.stringify(newSubmittedData));
         setFormData({ activity: '', price: '', type: '', booking: false, accessibility: 0 });
-      };
-
-    // i will use the react hook useEffect to trigger it to save the data to local storage to allow data persistence
-    useEffect(() => {
-        localStorage.setItem('formData', JSON.stringify(formData));
-      }, [formData]);
-
-    useEffect(() => {
-        localStorage.setItem('submittedData', JSON.stringify(submittedData));
-    }, [submittedData]);
+    };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -114,8 +104,7 @@ const form = () => {
                         type="checkbox" 
                         name="booking" 
                         checked={formData.booking} 
-                        onChange={(e) => setFormData({ ...formData, booking: e.target.checked })} 
-                        className="ml-2"
+                        onChange={(e) => setFormData((prev) => ({ ...prev, booking: e.target.checked }))}
                     />
                 </label>
 
